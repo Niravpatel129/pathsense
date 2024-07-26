@@ -7,7 +7,7 @@ const path = require('path');
 dotenv.config();
 
 const eventsRouter = require('./routes/events');
-const accountsRouter = require('./routes/accounts');
+// const accountsRouter = require('./routes/accounts');
 
 const app = express();
 
@@ -24,7 +24,7 @@ mongoose
   .catch((err) => console.error('Could not connect to MongoDB', err));
 
 app.use('/api/events', eventsRouter);
-app.use('/api/accounts', accountsRouter);
+// app.use('/api/accounts', accountsRouter);
 
 // Catch-all route to serve the tracker
 app.get('/tracker.min.js', (req, res) => {
