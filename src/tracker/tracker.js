@@ -1,9 +1,9 @@
 (function () {
   const API_URL = 'https://pathsense-95f645fbabcd.herokuapp.com/api/events';
-  let ACCOUNT_ID = null;
+  let ACCOUNT_ID = 'fake_account_123'; // Set a fake account ID to begin with
 
   function initTracker(accountId) {
-    ACCOUNT_ID = accountId;
+    ACCOUNT_ID = accountId || ACCOUNT_ID; // Use provided accountId or keep the fake one
     console.log(
       '%cTracker initialized with account ID:',
       'color: #2196F3; font-weight: bold;',
@@ -44,13 +44,6 @@
   }
 
   function logEvent(type, data) {
-    if (!ACCOUNT_ID) {
-      console.error(
-        '%cTracker not initialized with account ID',
-        'color: #F44336; font-weight: bold;',
-      );
-      return;
-    }
     console.log('%cEvent logged:', 'color: #4CAF50; font-weight: bold;', { type, data });
     fetch(API_URL, {
       method: 'POST',
@@ -65,13 +58,6 @@
   window.UserJourneyTracker = {
     init: initTracker,
     logCustomEvent: function (eventType, eventData) {
-      if (!ACCOUNT_ID) {
-        console.error(
-          '%cTracker not initialized with account ID',
-          'color: #F44336; font-weight: bold;',
-        );
-        return;
-      }
       logEvent(eventType, eventData);
     },
   };
