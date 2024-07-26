@@ -9,6 +9,8 @@
         'color: #F44336; font-weight: bold;',
       );
       return;
+    } else {
+      console.log('%cValid account ID provided', 'color: #4CAF50; font-weight: bold;');
     }
     ACCOUNT_ID = accountId;
     console.log(
@@ -18,6 +20,11 @@
     );
     if (typeof window !== 'undefined') {
       trackUserJourney();
+    } else {
+      console.log(
+        '%cWindow object not available, skipping user journey tracking',
+        'color: #FFA500; font-weight: bold;',
+      );
     }
   }
 
@@ -83,6 +90,11 @@
         .catch(function (error) {
           console.error('%cError logging event:', 'color: #F44336; font-weight: bold;', error);
         });
+    } else {
+      console.log(
+        '%cWindow object not available, skipping event sending',
+        'color: #FFA500; font-weight: bold;',
+      );
     }
   }
 
@@ -94,5 +106,10 @@
         logEvent(eventType, eventData);
       },
     };
+  } else {
+    console.log(
+      '%cWindow object not available, UserJourneyTracker not exposed globally',
+      'color: #FFA500; font-weight: bold;',
+    );
   }
 })();
