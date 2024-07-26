@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const path = require('path');
 
 dotenv.config();
 
@@ -12,16 +13,23 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+
+// Serve static files from the 'dist' directory
+app.use(express.static(path.join(__dirname, '../../dist')));
 
 // Connect to MongoDB
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('Could not connect to MongoDB', err));
 
 app.use('/api/events', eventsRouter);
 app.use('/api/accounts', accountsRouter);
 
-const PORT = process.env.PORT || 3008;
-app.listen(3049, () => console.log(`Server running on port ${3049}`));
+// Catch-all route to serve the tracker
+app.get('/tracker.min.js', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../dist/tracker.min.js'));
+});
+
+const PORT = process.env.PORT || 3049;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
