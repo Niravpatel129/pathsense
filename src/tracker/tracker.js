@@ -1,9 +1,16 @@
 (function () {
   const API_URL = 'https://pathsense-95f645fbabcd.herokuapp.com/api/events';
-  let ACCOUNT_ID = 'fake_account_123'; // Set a fake account ID to begin with
+  let ACCOUNT_ID = null; // Initialize ACCOUNT_ID as null
 
   function initTracker(accountId) {
-    ACCOUNT_ID = accountId || ACCOUNT_ID; // Use provided accountId or keep the fake one
+    if (!accountId) {
+      console.error(
+        '%cAccount ID is required for initialization',
+        'color: #F44336; font-weight: bold;',
+      );
+      return;
+    }
+    ACCOUNT_ID = accountId;
     console.log(
       '%cTracker initialized with account ID:',
       'color: #2196F3; font-weight: bold;',
@@ -46,15 +53,36 @@
   }
 
   function logEvent(type, data) {
+    if (!ACCOUNT_ID) {
+      console.error(
+        '%cTracker not initialized with account ID',
+        'color: #F44336; font-weight: bold;',
+      );
+      return;
+    }
     console.log('%cEvent logged:', 'color: #4CAF50; font-weight: bold;', { type, data });
     if (typeof window !== 'undefined') {
       fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ accountId: ACCOUNT_ID, type, data }),
-      }).catch(function (error) {
-        console.error('%cError logging event:', 'color: #F44336; font-weight: bold;', error);
-      });
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log(
+            '%cEvent successfully sent to server:',
+            'color: #4CAF50; font-weight: bold;',
+            data,
+          );
+        })
+        .catch(function (error) {
+          console.error('%cError logging event:', 'color: #F44336; font-weight: bold;', error);
+        });
     }
   }
 
