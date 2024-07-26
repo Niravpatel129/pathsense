@@ -9,7 +9,9 @@
       'color: #2196F3; font-weight: bold;',
       ACCOUNT_ID,
     );
-    trackUserJourney();
+    if (typeof window !== 'undefined') {
+      trackUserJourney();
+    }
   }
 
   function trackUserJourney() {
@@ -45,20 +47,24 @@
 
   function logEvent(type, data) {
     console.log('%cEvent logged:', 'color: #4CAF50; font-weight: bold;', { type, data });
-    fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ accountId: ACCOUNT_ID, type, data }),
-    }).catch(function (error) {
-      console.error('%cError logging event:', 'color: #F44336; font-weight: bold;', error);
-    });
+    if (typeof window !== 'undefined') {
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ accountId: ACCOUNT_ID, type, data }),
+      }).catch(function (error) {
+        console.error('%cError logging event:', 'color: #F44336; font-weight: bold;', error);
+      });
+    }
   }
 
   // Expose the init function globally
-  window.UserJourneyTracker = {
-    init: initTracker,
-    logCustomEvent: function (eventType, eventData) {
-      logEvent(eventType, eventData);
-    },
-  };
+  if (typeof window !== 'undefined') {
+    window.UserJourneyTracker = {
+      init: initTracker,
+      logCustomEvent: function (eventType, eventData) {
+        logEvent(eventType, eventData);
+      },
+    };
+  }
 })();
