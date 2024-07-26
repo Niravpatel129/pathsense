@@ -11,7 +11,14 @@ const eventsRouter = require('./routes/events');
 
 const app = express();
 
-app.use(cors());
+// Allow any URL to call this API
+app.use(
+  cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  }),
+);
 app.use(express.json());
 
 // Serve static files from the 'dist' directory
