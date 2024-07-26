@@ -23,5 +23,5 @@ mongoose
 app.use('/api/events', eventsRouter);
 app.use('/api/accounts', accountsRouter);
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const PORT = process.env.PORT || 3008;
+app.listen(3049, () => console.log(`Server running on port ${3049}`));
