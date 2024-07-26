@@ -1,5 +1,5 @@
 (function () {
-  const API_URL = 'https://your-heroku-app.herokuapp.com/api/events';
+  const API_URL = 'https://pathsense-95f645fbabcd.herokuapp.com/api/events';
   let ACCOUNT_ID = null;
 
   function initTracker(accountId) {
