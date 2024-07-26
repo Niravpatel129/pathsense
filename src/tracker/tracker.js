@@ -1,24 +1,15 @@
 (function () {
   const API_URL = 'https://pathsense-95f645fbabcd.herokuapp.com/api/events';
-  let ACCOUNT_ID = null; // Initialize ACCOUNT_ID as null
 
-  function initTracker(accountId) {
-    if (!accountId) {
-      console.error(
-        '%cAccount ID is required for initialization',
-        'color: #F44336; font-weight: bold;',
-      );
-      return;
-    } else {
-      console.log('%cValid account ID provided', 'color: #4CAF50; font-weight: bold;');
-    }
-    ACCOUNT_ID = accountId;
-    console.log(
-      '%cTracker initialized with account ID:',
-      'color: #2196F3; font-weight: bold;',
-      ACCOUNT_ID,
-    );
+  function initTracker() {
+    console.log('%cTracker initialized', 'color: #2196F3; font-weight: bold;');
     if (typeof window !== 'undefined') {
+      // Send initialization event
+      logEvent('trackerInitialized', {
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+        screenResolution: `${window.screen.width}x${window.screen.height}`,
+      });
       trackUserJourney();
     } else {
       console.log(
@@ -60,19 +51,12 @@
   }
 
   function logEvent(type, data) {
-    if (!ACCOUNT_ID) {
-      console.error(
-        '%cTracker not initialized with account ID',
-        'color: #F44336; font-weight: bold;',
-      );
-      return;
-    }
     console.log('%cEvent logged:', 'color: #4CAF50; font-weight: bold;', { type, data });
     if (typeof window !== 'undefined') {
       fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ accountId: ACCOUNT_ID, type, data }),
+        body: JSON.stringify({ type, data }),
       })
         .then((response) => {
           if (!response.ok) {
